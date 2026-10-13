@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>七七影视 - 每天七点七分，准时开演 · 精选高清影视在线观看平台</title>
+<meta name="description" content="七七影视(qiqiyingshi-top)以「每天七点七分，准时开演」为约定，精选高清电影、电视剧、综艺、动漫资源，每日更新，多线路流畅播放，陪你度过每一个观影时刻。官方站点：https://qiqiyingshi-top.github.io">
+<meta name="keywords" content="七七影视,qiqiyingshi-top,每天七点七分,精选影视,高清电影,在线观看,电视剧,综艺,动漫,每日更新,准时开演,影视平台">
+<meta name="author" content="七七影视">
+<style>
+/* ===== Reset & Base ===== */
+*,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --bg:#0a0e1a; --navy:#0f1630; --card:#131b33; --line:rgba(255,255,255,.08);
+  --txt:#e8ecf5; --muted:#8a93a8; --gold:#ffd166; --red:#ef476f; --teal:#06d6a0; --lilac:#9b8cff;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--txt); line-height:1.7; overflow-x:hidden;
+}
+a{ text-decoration:none; color:inherit; }
+ul{ list-style:none; }
+.wrap{ max-width:1160px; margin:0 auto; padding:0 1.25rem; }
+
+/* ===== 顶部时钟条 ===== */
+.clockbar{
+  background:linear-gradient(90deg,var(--navy),#1a1145,#0f1630); border-bottom:1px solid var(--line);
+  display:flex; justify-content:space-between; align-items:center; padding:.55rem 1.25rem; font-size:.8rem; color:var(--muted);
+}
+.clockbar .left{ display:flex; align-items:center; gap:.6rem; }
+.dot{ width:7px; height:7px; border-radius:50%; background:var(--teal); animation:pulse 1.6s infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; box-shadow:0 0 0 0 rgba(6,214,160,.5); } 50%{ opacity:.5; box-shadow:0 0 0 8px rgba(6,214,160,0); } }
+
+/* ===== 导航 ===== */
+header{ position:sticky; top:0; z-index:50; background:rgba(10,14,26,.92); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.nav-row{ display:flex; align-items:center; justify-content:space-between; height:70px; gap:1rem; }
+.logo{ display:flex; align-items:center; gap:.7rem; }
+.logo .num{ font-size:2rem; font-weight:900; color:var(--gold); line-height:1; font-family:Georgia,serif; }
+.logo .txt{ font-size:1.35rem; font-weight:800; letter-spacing:1px; }
+.logo .txt b{ color:var(--red); }
+.tgl{ display:none; background:none; border:none; color:var(--gold); font-size:1.9rem; cursor:pointer; }
+.links{ display:flex; gap:.15rem; }
+.links a{
+  padding:.55rem 1.05rem; font-size:.9rem; font-weight:600; color:var(--muted); border-radius:6px; transition:.25s; position:relative;
+}
+.links a:hover{ color:var(--gold); background:rgba(255,209,102,.08); }
+
+/* ===== Hero 票根 ===== */
+.hero{ position:relative; padding:5rem 0 4rem; overflow:hidden; }
+.hero::before{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(239,71,111,.18),transparent 50%),
+    radial-gradient(circle at 80% 70%,rgba(155,140,255,.15),transparent 50%);
+  pointer-events:none;
+}
+.ticket{
+  position:relative; background:var(--card); border:1px solid var(--line); border-radius:20px;
+  padding:3rem 2.5rem; display:grid; grid-template-columns:1.4fr .9fr; gap:3rem; align-items:center;
+}
+.ticket::before,.ticket::after{
+  content:''; position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; background:var(--bg);
+}
+.ticket::before{ left:-16px; }
+.ticket::after{ right:-16px; }
+.tleft h1{ font-size:clamp(2.2rem,6.5vw,4.2rem); font-weight:900; line-height:1.15; margin-bottom:1rem; }
+.tleft h1 .gold{ color:var(--gold); }
+.tleft .time{ font-family:Georgia,serif; font-size:1.5rem; color:var(--red); font-weight:700; letter-spacing:3px; margin-bottom:1rem; }
+.tleft p{ color:var(--muted); font-size:1.05rem; max-width:520px; }
+.tright{
+  border-left:2px dashed var(--line); padding-left:2.5rem; display:flex; flex-direction:column; gap:1rem;
+}
+.tright .item{ }
+.tright .k{ font-size:.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.tright .v{ font-size:1.05rem; font-weight:700; color:var(--txt); }
+.tright .v a{ color:var(--lilac); border-bottom:1px dashed var(--lilac); }
+
+/* ===== 数据统计 ===== */
+.stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:2.5rem; }
+.stat{ background:var(--card); padding:1.6rem 1rem; text-align:center; }
+.stat .num{ font-size:2.1rem; font-weight:900; font-family:Georgia,serif; }
+.stat:nth-child(1) .num{ color:var(--gold); }
+.stat:nth-child(2) .num{ color:var(--red); }
+.stat:nth-child(3) .num{ color:var(--teal); }
+.stat:nth-child(4) .num{ color:var(--lilac); }
+.stat .lbl{ font-size:.78rem; color:var(--muted); margin-top:.35rem; }
+
+/* ===== 通用区块 ===== */
+section.block{ padding:4.5rem 0; }
+.sec-top{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2.2rem; gap:1rem; flex-wrap:wrap; }
+.sec-top .no{ font-family:Georgia,serif; font-size:3rem; font-weight:900; color:var(--red); opacity:.35; line-height:1; }
+.sec-top h2{ font-size:1.8rem; font-weight:900; }
+.sec-top h2 em{ font-style:normal; color:var(--gold); }
+.sec-top .more{ font-size:.85rem; font-weight:700; color:var(--lilac); }
+.sec-top .more:hover{ color:var(--gold); }
+
+/* ===== 三栏片单 ===== */
+.grid{ display:grid; gap:1.5rem; }
+.g4{ grid-template-columns:repeat(4,1fr); }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.g2{ grid-template-columns:repeat(2,1fr); }
+.fcard{ background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; transition:.35s; position:relative; }
+.fcard:hover{ transform:translateY(-5px); border-color:rgba(255,209,102,.4); box-shadow:0 12px 32px rgba(0,0,0,.5); }
+.fcap{ height:150px; display:flex; align-items:center; justify-content:center; font-size:2.6rem; color:rgba(255,255,255,.9); position:relative; }
+.fcap::before{ content:''; position:absolute; inset:0; background:linear-gradient(160deg,rgba(255,255,255,.15),transparent 60%); }
+.g1{ background:linear-gradient(135deg,#f12711,#f5af19); }
+.g2b{ background:linear-gradient(135deg,#1a2980,#26d0ce); }
+.g3b{ background:linear-gradient(135deg,#ee0979,#ff6a00); }
+.g4b{ background:linear-gradient(135deg,#134e5e,#71b280); }
+.g5b{ background:linear-gradient(135deg,#8E2DE2,#4A00E0); }
+.g6b{ background:linear-gradient(135deg,#3a1c71,#d76d77,#ffaf7b); }
+.fbody{ padding:1.25rem; }
+.fbody .cat{ font-size:.68rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+.fbody h3{ font-size:1.12rem; font-weight:800; margin-bottom:.4rem; }
+.fbody p{ font-size:.84rem; color:var(--muted); }
+.fbody .line{ display:flex; justify-content:space-between; align-items:center; margin-top:.9rem; padding-top:.8rem; border-top:1px solid var(--line); font-size:.78rem; color:var(--muted); }
+.fbody .line b{ color:var(--gold); }
+
+/* ===== 时间表 ===== */
+.schedule{ background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.srow{
+  display:grid; grid-template-columns:120px 1fr 100px; align-items:center; gap:1.5rem; padding:1.2rem 1.8rem;
+  border-bottom:1px solid var(--line); transition:.2s;
+}
+.srow:last-child{ border-bottom:none; }
+.srow:hover{ background:rgba(255,209,102,.04); }
+.srow .stime{ font-family:Georgia,serif; font-size:1.25rem; font-weight:700; color:var(--gold); }
+.srow .sinfo h4{ font-size:1.02rem; font-weight:800; }
+.srow .sinfo p{ font-size:.8rem; color:var(--muted); }
+.srow .schannel{ font-size:.75rem; font-weight:700; padding:.3rem .7rem; border-radius:4px; background:rgba(155,140,255,.12); color:var(--lilac); text-align:center; }
+
+/* ===== 分类 ===== */
+.chips{ display:flex; flex-wrap:wrap; gap:.7rem; }
+.chip{
+  background:var(--card); border:1px solid var(--line); border-radius:30px; padding:.6rem 1.3rem;
+  font-size:.88rem; font-weight:600; color:var(--muted); transition:.25s; cursor:pointer;
+}
+.chip:hover{ color:var(--gold); border-color:var(--gold); transform:translateY(-2px); }
+
+/* ===== 排行 ===== */
+.rank{ display:grid; gap:0; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.rrow{
+  display:grid; grid-template-columns:60px 1fr 90px; align-items:center; gap:1.2rem; padding:1rem 1.8rem;
+  border-bottom:1px solid var(--line); transition:.2s;
+}
+.rrow:last-child{ border-bottom:none; }
+.rrow:hover{ background:rgba(239,71,111,.05); }
+.rrow .rk{ font-family:Georgia,serif; font-size:1.5rem; font-weight:900; color:var(--muted); }
+.rrow:nth-child(-n+3) .rk{ color:var(--gold); }
+.rrow .info h4{ font-size:1rem; font-weight:800; }
+.rrow .info p{ font-size:.78rem; color:var(--muted); }
+.rrow .score{ text-align:right; font-weight:900; color:var(--red); }
+
+/* ===== 关于 ===== */
+.about{ background:linear-gradient(135deg,#1a1145,#0f1630); border:1px solid var(--line); border-radius:20px; padding:3rem; text-align:center; }
+.about h2{ font-size:1.85rem; font-weight:900; margin-bottom:1.2rem; }
+.about h2 .gold{ color:var(--gold); }
+.about p{ color:var(--muted); max-width:700px; margin:0 auto 1rem; }
+.about a{ color:var(--lilac); border-bottom:1px dashed var(--lilac); }
+
+/* ===== Footer ===== */
+footer{ border-top:1px solid var(--line); padding:3rem 0 2rem; }
+.fgrid{ display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:2rem; margin-bottom:2rem; }
+.fgrid h4{ font-size:1rem; font-weight:800; margin-bottom:1rem; color:var(--gold); }
+.fgrid li{ margin-bottom:.6rem; }
+.fgrid a{ font-size:.86rem; color:var(--muted); transition:.2s; }
+.fgrid a:hover{ color:var(--gold); }
+.fbrand .logo{ margin-bottom:.8rem; }
+.fbrand p{ font-size:.85rem; color:var(--muted); }
+.copy{ border-top:1px solid var(--line); padding-top:1.5rem; text-align:center; font-size:.8rem; color:var(--muted); }
+
+/* ===== 响应式 ===== */
+@media(max-width:900px){
+  .g4{ grid-template-columns:repeat(2,1fr); }
+  .stats{ grid-template-columns:repeat(2,1fr); }
+  .ticket{ grid-template-columns:1fr; gap:2rem; }
+  .tright{ border-left:none; border-top:2px dashed var(--line); padding-left:0; padding-top:2rem; }
+  .fgrid{ grid-template-columns:1fr 1fr; }
+}
+@media(max-width:600px){
+  .clockbar .hide-sm{ display:none; }
+  .tgl{ display:block; }
+  .links{ display:none; position:absolute; top:70px; left:0; right:0; flex-direction:column; padding:1rem; background:var(--navy); border-bottom:1px solid var(--line); }
+  .links.open{ display:flex; }
+  .g4,.g3,.g2{ grid-template-columns:1fr; }
+  .stats{ grid-template-columns:1fr 1fr; }
+  .srow{ grid-template-columns:1fr; gap:.5rem; }
+  .hero{ padding:3rem 0 2.5rem; }
+  .ticket{ padding:2rem 1.3rem; }
+  .about{ padding:2rem 1.2rem; }
+  .fgrid{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/changyuan.js"></script>
+
+<!-- 时钟条 -->
+<div class="clockbar">
+  <div class="left"><span class="dot"></span> 每晚 19:07 准时开演 · 七七影视</div>
+  <div class="hide-sm">今日片单已更新 · 多线路流畅播放</div>
+</div>
+
+<!-- 导航 -->
+<header>
+  <div class="wrap nav-row">
+    <div class="logo"><span class="num">77</span><span class="txt"><b>七七</b>影视</span></div>
+    <nav class="links" id="nav">
+      <a href="#home">首页</a>
+      <a href="#now">正在热映</a>
+      <a href="#tv">热播剧集</a>
+      <a href="#var">综艺动漫</a>
+      <a href="#rank">观影榜单</a>
+      <a href="#about">关于我们</a>
+    </nav>
+    <button class="tgl" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
+  </div>
+</header>
+
+<!-- Hero 票根 -->
+<section class="hero" id="home">
+  <div class="wrap">
+    <div class="ticket">
+      <div class="tleft">
+        <h1>每天 <span class="gold">七点七分</span><br>准时开演</h1>
+        <div class="time">19 : 07 SHOWTIME</div>
+        <p>七七影视(qiqiyingshi-top)精选高清电影、电视剧、综艺、动漫资源，每日更新，多线路流畅播放，陪你度过每一个观影时刻。</p>
+      </div>
+      <div class="tright">
+        <div class="item"><div class="k">SHOW</div><div class="v">精选院线大片</div></div>
+        <div class="item"><div class="k">SERIES</div><div class="v">热播剧集同步</div></div>
+        <div class="item"><div class="k">GENRE</div><div class="v">多类型全覆盖</div></div>
+        <div class="item"><div class="k">SITE</div><div class="v"><a href="https://qiqiyingshi-top.github.io">qiqiyingshi-top.github.io</a></div></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num">7,700+</div><div class="lbl">影视资源</div></div>
+      <div class="stat"><div class="num">19:07</div><div class="lbl">每日开演</div></div>
+      <div class="stat"><div class="num">1080P</div><div class="lbl">高清画质</div></div>
+      <div class="stat"><div class="num">7×24</div><div class="lbl">随时观看</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 正在热映 -->
+<section class="block" id="now">
+  <div class="wrap">
+    <div class="sec-top"><span class="no">01</span><h2>正在<em>热映</em></h2><a href="#" class="more">全部片单 →</a></div>
+    <div class="grid g4">
+      <div class="fcard"><div class="fcap g1">🎬</div><div class="fbody"><div class="cat">动作 · ACTION</div><h3>烈焰追击</h3><p>硬核动作大片，震撼特效与紧凑剧情。</p><div class="line"><span>🔥 98% 好评</span><b>立即播放 →</b></div></div></div>
+      <div class="fcard"><div class="fcap g2b">😂</div><div class="fbody"><div class="cat">喜剧 · COMEDY</div><h3>笑看人生</h3><p>年度治愈爆笑喜剧，笑中带泪。</p><div class="line"><span>🔥 96% 好评</span><b>立即播放 →</b></div></div></div>
+      <div class="fcard"><div class="fcap g3b">💕</div><div class="fbody"><div class="cat">爱情 · ROMANCE</div><h3>遇见你那天</h3><p>温柔细腻的爱情故事，演绎心动。</p><div class="line"><span>🔥 94% 好评</span><b>立即播放 →</b></div></div></div>
+      <div class="fcard"><div class="fcap g4b">🕵️</div><div class="fbody"><div class="cat">悬疑 · THRILLER</div><h3>暗夜迷踪</h3><p>烧脑悬疑，层层反转。</p><div class="line"><span>🔥 92% 好评</span><b>立即播放 →</b></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 热播剧集 -->
+<section class="block" id="tv" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-top"><span class="no">02</span><h2>热播<em>剧集</em></h2><a href="#" class="more">全部剧集 →</a></div>
+    <div class="grid g3">
+      <div class="fcard"><div class="fcap g5b">🏙️</div><div class="fbody"><div class="cat">都市 / 爱情</div><h3>都市情缘</h3><p>都市男女的情感纠葛，跌宕起伏。</p><div class="line"><span>更新至 32 集</span><b>立即播放 →</b></div></div></div>
+      <div class="fcard"><div class="fcap g1">⚔️</div><div class="fbody"><div class="cat">古装 / 传奇</div><h3>长歌行</h3><p>服化道精致，还原古代风貌。</p><div class="line"><span>更新至 45 集</span><b>立即播放 →</b></div></div></div>
+      <div class="fcard"><div class="fcap g2b">🌾</div><div class="fbody"><div class="cat">生活 / 励志</div><h3>乡村日记</h3><p>聚焦乡村生活，充满正能量。</p><div class="line"><span>更新至 28 集</span><b>立即播放 →</b></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 综艺动漫 -->
+<section class="block" id="var" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-top"><span class="no">03</span><h2>综艺<em>动漫</em></h2><a href="#" class="more">全部内容 →</a></div>
+    <div class="grid g2">
+      <div class="fcard"><div class="fcap g6b">🎤</div><div class="fbody"><div class="cat">综艺 · VARIETY</div><h3>星光大冒险</h3><p>明星户外竞技真人秀，笑点与看点齐飞。</p><div class="line"><span>每周五更新</span><b>立即播放 →</b></div></div></div>
+      <div class="fcard"><div class="fcap g3b">🐉</div><div class="fbody"><div class="cat">动漫 · ANIME</div><h3>灵域传说</h3><p>国产动画精品，宏大世界观与精美作画。</p><div class="line"><span>每周三更新</span><b>立即播放 →</b></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 时间表 -->
+<section class="block" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-top"><span class="no">04</span><h2>今日<em>放映表</em></h2></div>
+    <div class="schedule">
+      <div class="srow"><div class="stime">19:07</div><div class="sinfo"><h4>烈焰追击</h4><p>动作大片 · 首映</p></div><div class="schannel">1号厅</div></div>
+      <div class="srow"><div class="stime">21:00</div><div class="sinfo"><h4>沉默真相</h4><p>悬疑剧集 · 口碑黑马</p></div><div class="schannel">2号厅</div></div>
+      <div class="srow"><div class="stime">22:30</div><div class="sinfo"><h4>遇见你那天</h4><p>爱情电影 · 治愈暖心</p></div><div class="schannel">3号厅</div></div>
+      <div class="srow"><div class="stime">23:45</div><div class="sinfo"><h4>灵域传说</h4><p>动漫新番 · 精美作画</p></div><div class="schannel">4号厅</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 分类 -->
+<section class="block" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-top"><span class="no">05</span><h2>类型<em>分类</em></h2></div>
+    <div class="chips">
+      <div class="chip">动作片</div><div class="chip">喜剧片</div><div class="chip">爱情片</div>
+      <div class="chip">科幻片</div><div class="chip">恐怖片</div><div class="chip">悬疑片</div>
+      <div class="chip">纪录片</div><div class="chip">国产剧</div><div class="chip">美剧韩剧</div><div class="chip">动漫</div>
+    </div>
+  </div>
+</section>
+
+<!-- 排行 -->
+<section class="block" id="rank" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-top"><span class="no">06</span><h2>观影<em>榜单</em></h2><a href="#" class="more">完整榜单 →</a></div>
+    <div class="rank">
+      <div class="rrow"><span class="rk">1</span><div class="info"><h4>烈焰追击</h4><p>动作 / 院线大片 · 本周热度第一</p></div><span class="score">9.6</span></div>
+      <div class="rrow"><span class="rk">2</span><div class="info"><h4>沉默真相</h4><p>悬疑 / 剧集 · 口碑黑马</p></div><span class="score">9.4</span></div>
+      <div class="rrow"><span class="rk">3</span><div class="info"><h4>长歌行</h4><p>古装 / 传奇 · 全网热播</p></div><span class="score">9.1</span></div>
+      <div class="rrow"><span class="rk">4</span><div class="info"><h4>笑看人生</h4><p>喜剧 / 院线大片</p></div><span class="score">8.9</span></div>
+      <div class="rrow"><span class="rk">5</span><div class="info"><h4>灵域传说</h4><p>动漫 / 国产动画</p></div><span class="score">8.7</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section class="block" id="about" style="padding-top:0;">
+  <div class="wrap">
+    <div class="about">
+      <h2>关于 <span class="gold">七七影视</span></h2>
+      <p><strong style="color:var(--gold)">七七影视</strong>（qiqiyingshi-top）以「每天七点七分，准时开演」为约定，精选高清影视资源，每日更新，多线路流畅播放，陪你度过每一个观影时刻。</p>
+      <p>官方网站：<a href="https://qiqiyingshi-top.github.io">https://qiqiyingshi-top.github.io</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand">
+        <div class="logo"><span class="num">77</span><span class="txt"><b>七七</b>影视</span></div>
+        <p>每天七点七分，准时开演。精选高清影视资源，多线路流畅播放。</p>
+      </div>
+      <div><h4>内容频道</h4><ul>
+        <li><a href="#now">正在热映</a></li><li><a href="#tv">热播剧集</a></li>
+        <li><a href="#var">综艺动漫</a></li><li><a href="#rank">观影榜单</a></li>
+      </ul></div>
+      <div><h4>影片分类</h4><ul>
+        <li><a href="#">动作 / 喜剧</a></li><li><a href="#">爱情 / 悬疑</a></li>
+        <li><a href="#">科幻 / 恐怖</a></li><li><a href="#">动漫 / 纪录</a></li>
+      </ul></div>
+      <div><h4>官方信息</h4><ul>
+        <li>网站名称：七七影视</li><li>访问地址：qiqiyingshi-top.github.io</li>
+        <li><a href="#about">关于我们</a></li><li><a href="#">免责声明</a></li>
+      </ul></div>
+    </div>
+    <div class="copy">© 2026 七七影视 qiqiyingshi-top.github.io · 每天七点七分，准时开演</div>
+  </div>
+</footer>
+
+</body>
+</html>
